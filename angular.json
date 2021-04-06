@@ -122,6 +122,46 @@
           }
         }
       }
+    },
+    "right-menu": {
+      "projectType": "library",
+      "root": "projects/right-menu",
+      "sourceRoot": "projects/right-menu/src",
+      "prefix": "zc",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/right-menu/tsconfig.lib.json",
+            "project": "projects/right-menu/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/right-menu/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/right-menu/src/test.ts",
+            "tsConfig": "projects/right-menu/tsconfig.spec.json",
+            "karmaConfig": "projects/right-menu/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/right-menu/tsconfig.lib.json",
+              "projects/right-menu/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "zhou-ng-lib"
