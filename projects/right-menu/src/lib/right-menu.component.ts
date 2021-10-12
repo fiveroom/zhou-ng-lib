@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'zc-right-menu',
-  template: `
+    selector: 'zc-right-menu',
+    template: `
     <p>
       right-menu works!
+      <button nz-button nzType="primary">按钮qwer</button>
     </p>
   `,
-  styles: [
-  ]
+    styles: []
 })
 export class RightMenuComponent implements OnInit {
 
-  constructor() { }
+    constructor() {
+    }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+    }
 
 }
