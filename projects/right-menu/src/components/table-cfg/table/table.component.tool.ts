@@ -1,3 +1,5 @@
+import {ITable} from './table.conponent.interface';
+
 export class TreeData {
 
     static convertTreeToList(root: any, dataId: string, childrenProp = 'children'): any[] {
@@ -70,6 +72,123 @@ export class TreeData {
         });
         return res;
     }
+
+    static toTreeMap(data: any[], idProp: string, childrenProp: string){
+        let map = {};
+        data?.forEach(item => {
+            map[item[idProp]] = TreeData.convertTreeToList(item, idProp, childrenProp);
+        });
+        return map
+    }
+
+
+    static setDefineProp(o: any, p: PropertyKey, attributes: any) {
+        let pDescriptor = Object.getOwnPropertyDescriptor(o, p);
+        let attr: PropertyDescriptor = attributes;
+        if(Object.prototype.toString.call(attributes) !== '[object Object]'){
+            attr = {
+                value: attributes,
+                writable: true
+            }
+        }
+        if (!pDescriptor) {
+            Object.defineProperty(o, p, attr);
+        } else if (pDescriptor.writable) {
+            o[p] = attr.value;
+        }
+    }
+
+    static setColSpan(data: ITable[]): [ITable[][], ITable[], number] {
+        let manyCfg:ITable[][] = [];
+        let inpCfg:ITable[] = [];
+        let maxDeep = 0;
+        if(Array.isArray(data) && data.length) {
+            let deepArr = [];
+            let setColSpan = (d, deep = 0, parent = null) => {
+                if (Array.isArray(d)) {
+                    deep++;
+                    deepArr.push(deep);
+                    manyCfg[deep - 1] = manyCfg[deep - 1] || [];
+                    const childLen = d.reduce((a, b) => {
+                        this.setDefaultProp(b);
+                        this.setDefineProp(b, '__parent__', {value: parent, writable: true});
+                        if(b.show){
+                            manyCfg[deep - 1].push(b);
+                            if (b.serialNum || !b.children?.length) {
+                                inpCfg.push(b);
+                            }
+                            let l = setColSpan(b.children, deep, b);
+                            this.setDefineProp(b, '__colSpan__', l);
+                            this.setDefineProp(b, '__deep__', deep);
+                            return a + l;
+                        }
+                        return a
+                    }, 0);
+                    if(childLen > 0){
+                        deepArr.push(deep);
+                        return childLen
+                    }
+                    return 1
+                }
+                return 1;
+            };
+            setColSpan(data);
+            maxDeep = (deepArr.length ? Math.max(...deepArr) : 1) + 1;
+        }
+        return [manyCfg, inpCfg, maxDeep]
+    }
+
+    static setRowSpan(data, maxDeep){
+        if(Array.isArray(data) && data.length){
+            let childDeepArr = [];
+            data.forEach(o => {
+                if(o.show){
+                    let childD = this.setRowSpan(o.children, maxDeep);
+                    childDeepArr.push(childD);
+                    this.setDefineProp(o, '__rowSpan__', childD ? 1 : maxDeep - o.__deep__ - childD);
+                }
+            })
+            return childDeepArr.length ? Math.max(...childDeepArr) + 1 : 0;
+        }
+        return 0
+    }
+
+    static judgeTheadRight(data, isRight = true){
+        if(Array.isArray(data) && data.length){
+            const len = data.length - 1;
+            let hasRight = false;
+            for (let i = len; i >= 0; i--) {
+                let o = data[i]
+                let currRight = false;
+                if(!hasRight && isRight && o.show){
+                    hasRight = true;
+                    currRight = true;
+                }
+                this.judgeTheadRight(o.children, currRight);
+                this.setDefineProp(o, '__isRight__',  currRight);
+            }
+        }
+    }
+
+    static setDefaultProp(item: ITable){
+
+        if(!Reflect.has(item, 'show')){
+            item.show = true;
+        }
+
+        if(!Reflect.has(item, '__guid__')){
+            this.setDefineProp(item, '__guid__', {
+                value: `${this.s4()}_${this.s4()}`
+            })
+        }
+
+    }
+
+    static s4() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
+
+
 }
 
 export class TreeTools {

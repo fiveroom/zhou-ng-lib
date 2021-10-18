@@ -20,7 +20,6 @@
     [nzFrontPagination]="nzFrontPagination"
     [nzPageSizeOptions]="nzPageSizeOptions"
     [nzItemRender]="nzItemRender"
-
 >
     <thead>
     <ng-container *ngFor="let cfgArr of manyCfg;first as isFirst">
@@ -50,11 +49,11 @@
                 >
                     <ng-container *ngIf="thContents[cfg.prop];else defaultHead">
                         <ng-container
-                            *ngTemplateOutlet="thContents[cfg.prop]; context: {$implicit: cfg.cprop, cfg: cfg}">
+                            *ngTemplateOutlet="thContents[cfg.prop]; context: {$implicit: cfg.cProp, cfg: cfg}">
                         </ng-container>
                     </ng-container>
                     <ng-template #defaultHead>
-                        {{cfg.cprop}}
+                        {{cfg.cProp}}
                     </ng-template>
                 </th>
             </ng-template>
@@ -156,19 +155,5 @@
         </ng-template>
     </ng-template>
 </ng-template>
-
-<!--<div class="nz-pagination" style="margin-top: 10px" *ngIf="dataTotal" @showPagination>-->
-<!--    <nz-pagination-->
-<!--        [nzShowTotal]="totalTemplate"-->
-<!--        nzShowSizeChanger-->
-<!--        [(nzPageSize)]="pageSize"-->
-<!--        [(nzPageIndex)]="pageStart"-->
-<!--        [nzTotal]="dataTotal"-->
-<!--        (nzPageSizeChange)="nzPageSizeChange($event)"-->
-<!--        (nzPageIndexChange)="nzPageIndexChange($event)"-->
-<!--        [nzSize]="nzSizePagination"-->
-<!--    >-->
-<!--    </nz-pagination>-->
-<!--</div>-->
 
 <ng-template #totalTemplate let-total>共 {{ total }} 条</ng-template>
