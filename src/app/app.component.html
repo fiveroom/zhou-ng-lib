@@ -7,10 +7,27 @@
     [nzBordered]="true"
     [nzOuterBordered]="false"
     [nzPaginationType]="'default'"
-    style="height: 600px"
+    style="height: 300px"
     [nzTableLayout]="'auto'"
     [useNzWidth]="false"
 
 >
-
 </zc-table>
+
+<button nz-button (click)="setInput()">生成</button>
+<button nz-button (click)="setTemplate()">生成Template</button>
+
+<div #container>
+
+</div>
+
+<ng-template #dataF let-data>
+    {{data}} 动态创建
+</ng-template>
+
+
+<div>
+    <ng-container #testContainer>
+
+    </ng-container>
+</div>

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, ComponentFactoryResolver, EmbeddedViewRef, TemplateRef, ViewChild, ViewContainerRef} from '@angular/core';
 import {ITable} from '../../projects/right-menu/src/components/table-cfg/table/table.conponent.interface';
+import {QuestionComponent} from '../../projects/right-menu/src/components/dymic-form/question/question.component';
 
 @Component({
   selector: 'app-root',
@@ -17,12 +18,12 @@ export class AppComponent {
     }));
     tableCfg: ITable[] = [
         {
-            cprop: '序号',
+            cProp: '序号',
             nzWidth: '70px',
             serialNum: true,
             rowspan: 3
         }, {
-            cprop: '任务名称',
+            cProp: '任务名称',
             prop: 'AcceptTaskName',
             styleB: {
                 nzAlign: 'left'
@@ -32,41 +33,41 @@ export class AppComponent {
             rowspan: 3,
             colspan: 0
         }, {
-            cprop: '项目类别',
+            cProp: '项目类别',
             prop: '',
             // rowspan: 3,
             colspan: 3,
             children: [
                 {
                     prop: '',
-                    cprop: '尺寸',
+                    cProp: '尺寸',
                     colspan: 2,
                     // rowspan: 2,
                     children: [
                         {
                             prop: 'dddd',
-                            cprop: '尺寸尺寸1',
+                            cProp: '尺寸尺寸1',
                         }, {
                             prop: 'ddde',
-                            cprop: '尺寸尺寸2',
+                            cProp: '尺寸尺寸2',
                         }
                     ]
                 }, {
                     // colspan: 2,
                     prop: '',
-                    cprop: '尺寸',
+                    cProp: '尺寸',
                     rowspan: 2,
                     show: false
                 }
             ]
         },
         {
-            cprop: '任务类型',
+            cProp: '任务类型',
             prop: '',
             rowspan: 3,
             show: false
         }, {
-            cprop: '分配人',
+            cProp: '分配人',
             prop: 'TaskAssigner',
             styleB: {
                 nzAlign: 'left'
@@ -75,39 +76,39 @@ export class AppComponent {
             show: true
         },
         // {
-        //     cprop: '分配时间',
+        //     cProp: '分配时间',
         //     prop: 'AcceptTaskTime',
         //     nzWidth: '160px',
         //     rowspan: 3,
         //     show: true,
         //     children: [
         //         {
-        //             cprop: '分配时间1',
+        //             cProp: '分配时间1',
         //             children: [
         //                 {
-        //                     cprop: '分配时间11'
+        //                     cProp: '分配时间11'
         //                 },
         //                 {
-        //                     cprop: '分配时间22'
+        //                     cProp: '分配时间22'
         //                 }
         //             ]
         //         },
         //         {
-        //             cprop: '分配时间2',
+        //             cProp: '分配时间2',
         //             children: [
         //                 {
-        //                     cprop: '分配时间3',
+        //                     cProp: '分配时间3',
         //                     show: false
         //                 },   {
-        //                     cprop: '分配时间3'
+        //                     cProp: '分配时间3'
         //                 }, {
-        //                     cprop: '分配时间3',
+        //                     cProp: '分配时间3',
         //                     children: [
         //                         {
-        //                             cprop: '分配时间31'
+        //                             cProp: '分配时间31'
         //                         },
         //                         {
-        //                             cprop: '分配时间32'
+        //                             cProp: '分配时间32'
         //                         }
         //                     ]
         //                 },
@@ -116,7 +117,7 @@ export class AppComponent {
         //     ]
         // },
         {
-            cprop: '描述',
+            cProp: '描述',
             prop: 'dddd',
             styleB: {
                 nzAlign: 'left'
@@ -126,15 +127,15 @@ export class AppComponent {
             children: [
                 {
                     prop: 'dddf',
-                    cprop: '描述1'
+                    cProp: '描述1'
                 },
                 {
                     prop: 'dddg',
-                    cprop: '描述2'
+                    cProp: '描述2'
                 }
             ]
         }, {
-            cprop: '备注',
+            cProp: '备注',
             prop: 'Memo',
             isRight: true,
             styleB: {
@@ -144,4 +145,30 @@ export class AppComponent {
             show: false
         }
     ];
+
+    @ViewChild('container') container: ViewContainerRef;
+    @ViewChild('dataF') dataF: TemplateRef<any>;
+
+    // read: ViewContainerRef 告诉是一个容器
+    @ViewChild('testContainer', {read: ViewContainerRef}) testContainer: ViewContainerRef;
+
+    constructor(
+        private viewContainerRef: ViewContainerRef,
+        private componentFactoryResolver: ComponentFactoryResolver
+    ) {
+    }
+
+    // 组件型视图
+    setInput(){
+        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuestionComponent);
+        this.testContainer.createComponent(componentFactory)
+    }
+
+    // 模板视图
+    setTemplate() {
+        // let embeddedViewRef = this.testContainer.createEmbeddedView(this.dataF, {$implicit: '123'});
+        let dataF = this.dataF.createEmbeddedView({$implicit: '123'})
+        console.log(' :>> ', dataF);
+        this.testContainer.insert(dataF)
+    }
 }
