@@ -1,0 +1,174 @@
+<nz-table
+    #fixedTable
+    [nzData]="bftData"
+    [nzSize]="nzSize"
+    [nzLoading]="nzLoading"
+    [nzTableLayout]="nzTableLayout"
+    [nzWidthConfig]="widthCfg"
+    [nzScroll]="useNzWidth ? {x: 'calc(100% + 0)'} : null"
+    [nzBordered]="nzBordered"
+    [nzOuterBordered]="nzOuterBordered"
+    [nzTotal]="dataTotal"
+    [nzShowTotal]="totalTemplate"
+    (nzPageIndexChange)="nzPageIndexChange($event)"
+    (nzPageSizeChange)="nzPageSizeChange($event)"
+    [(nzPageIndex)]="pageStart"
+    [(nzPageSize)]="pageSize"
+    [nzShowSizeChanger]="nzShowSizeChanger"
+    [nzShowPagination]="nzShowPagination"
+    [nzPaginationType]="nzPaginationType"
+    [nzFrontPagination]="nzFrontPagination"
+    [nzPageSizeOptions]="nzPageSizeOptions"
+    [nzItemRender]="nzItemRender"
+
+>
+    <thead>
+    <ng-container *ngFor="let cfgArr of manyCfg;first as isFirst">
+        <tr>
+            <th
+                *ngIf="isFirst && checkBox"
+                [(nzChecked)]="checked"
+                [nzIndeterminate]="indeterminate"
+                (nzCheckedChange)="onAllChecked($event)"
+                [rowspan]="manyCfg.length"
+                nzLeft
+            ></th>
+            <ng-template ngFor let-cfg [ngForOf]="cfgArr" >
+                <th
+                    *ngIf="!!cfg.show"
+                    [nzLeft]="!!cfg.nzLeft"
+                    [nzRight]="!!cfg.nzRight"
+                    [nzAlign]="cfg.styleH?.nzAlign || 'center'"
+                    [nzSortFn]="cfg.nzSortFn"
+                    (nzSortOrderChange)="cfg.nzSortOrderChange && cfg.nzSortOrderChange({sortOrder: $event, prop: cfg.prop})"
+                    [(nzSortOrder)]="cfg.nzSortOrder"
+                    [nzSortPriority]="cfg.nzSortPriority"
+                    [colspan]="cfg.__colSpan__"
+                    [rowspan]="cfg.__rowSpan__"
+                    [nzWidth]="useNzWidth ? '' : cfg.nzWidth"
+                    [class.static-height-right]="cfg.__isRight__"
+                >
+                    <ng-container *ngIf="thContents[cfg.prop];else defaultHead">
+                        <ng-container
+                            *ngTemplateOutlet="thContents[cfg.prop]; context: {$implicit: cfg.cprop, cfg: cfg}">
+                        </ng-container>
+                    </ng-container>
+                    <ng-template #defaultHead>
+                        {{cfg.cprop}}
+                    </ng-template>
+                </th>
+            </ng-template>
+        </tr>
+    </ng-container>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="isTreeData">
+        <ng-container *ngFor="let data of fixedTable.data; let i=index">
+            <ng-container *ngFor="let item of mapOfExpandedData[data[reWriteProp.dataId]]">
+                <tr
+                    *ngIf="(item.__parent__ && item.__parent__.__expand__) || !item.__parent__"
+                    [class.table-row-check]="openRowCheck && (reWriteProp.dataId ? (data[reWriteProp.dataId] === currId) : (item.__y__=== currId))"
+                    (click)="rowClick(item, item.__y__)"
+                >
+                    <ng-container *ngFor="let cfg of inpTCfg; index as j; first as isFirst">
+                        <td
+                            *ngIf="collProp === cfg.prop; else noFirst"
+                            [nzEllipsis]="cfg.styleB?.nzEllipsis || false"
+                            [nzAlign]="cfg.styleB?.nzAlign"
+                            [nzIndentSize]="item.__level__! * indentSize"
+                            [nzShowExpand]="!!item[reWriteProp.childrenProp]?.length"
+                            [(nzExpand)]="item.__expand__"
+                            [nzLeft]="!!cfg.nzLeft"
+                            [nzRight]="!!cfg.nzRight"
+                            [attr.title]="cfg.showTitle && cfg.prop && data && data[cfg.prop] || ''"
+                            (nzExpandChange)="collapseChange(mapOfExpandedData[data[reWriteProp.dataId]], item, $event)"
+                        >
+                            <ng-template
+                                [ngTemplateOutlet]="tdContent"
+                                [ngTemplateOutletContext]="{$implicit: item,  index: i, cfg: cfg}">
+                            </ng-template>
+                        </td>
+                        <ng-template #noFirst>
+                            <td
+                                *ngIf="!!cfg.show"
+                                [nzEllipsis]="cfg.styleB?.nzEllipsis || false"
+                                [nzAlign]="cfg.styleB?.nzAlign"
+                                [nzLeft]="!!cfg.nzLeft"
+                                [nzRight]="!!cfg.nzRight"
+                                [attr.title]="cfg.showTitle && cfg.prop && item && item[cfg.prop] || ''"
+                            >
+                                <ng-template
+                                    [ngTemplateOutlet]="tdContent"
+                                    [ngTemplateOutletContext]="{$implicit: item, index: i, cfg: cfg}">
+                                </ng-template>
+                            </td>
+                        </ng-template>
+                    </ng-container>
+                </tr>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!isTreeData">
+        <tr
+            *ngFor="let data of fixedTable.data;let i = index"
+            [class.table-row-check]="openRowCheck && (reWriteProp.dataId ? (data[reWriteProp.dataId] === currId) : (i=== currId))"
+            (click)="rowClick(data, i)"
+        >
+            <td
+                *ngIf="checkBox"
+                [nzChecked]="setOfCheckedItem.has(getItemID(data))"
+                (nzCheckedChange)="onItemChecked(data, $event)"
+                nzLeft
+            >
+            </td>
+            <ng-template ngFor [ngForOf]="inpTCfg" let-cfg let-index="index">
+                <td
+                    *ngIf="!!cfg.show"
+                    [nzEllipsis]="cfg.styleB?.nzEllipsis || false"
+                    [nzAlign]="cfg.styleB?.nzAlign || 'center'"
+                    [nzLeft]="!!cfg.nzLeft"
+                    [nzRight]="!!cfg.nzRight"
+                    [attr.title]="cfg.showTitle && cfg.prop && data && data[cfg.prop] || ''"
+                >
+                    <ng-template
+                        [ngTemplateOutlet]="tdContent"
+                        [ngTemplateOutletContext]="{$implicit: data,  index: i, cfg: cfg}">
+                    </ng-template>
+                </td>
+            </ng-template>
+        </tr>
+    </ng-container>
+    </tbody>
+</nz-table>
+
+<ng-template #tdContent let-data let-cfg="cfg" let-index="index">
+    <ng-container *ngIf="cfg.serialNum;else noSerial">
+        {{index + 1}}
+    </ng-container>
+    <ng-template #noSerial>
+        <ng-container *ngIf="tdContents[cfg.prop];else noContent">
+            <ng-container
+                *ngTemplateOutlet="tdContents[cfg.prop]; context: {$implicit: data[cfg.prop], rowData: data, cfg: cfg}">
+            </ng-container>
+        </ng-container>
+        <ng-template #noContent>
+            {{cfg.fromData ? cfg.fromData(data[cfg.prop]) : (data[cfg.prop] || '')}}
+        </ng-template>
+    </ng-template>
+</ng-template>
+
+<!--<div class="nz-pagination" style="margin-top: 10px" *ngIf="dataTotal" @showPagination>-->
+<!--    <nz-pagination-->
+<!--        [nzShowTotal]="totalTemplate"-->
+<!--        nzShowSizeChanger-->
+<!--        [(nzPageSize)]="pageSize"-->
+<!--        [(nzPageIndex)]="pageStart"-->
+<!--        [nzTotal]="dataTotal"-->
+<!--        (nzPageSizeChange)="nzPageSizeChange($event)"-->
+<!--        (nzPageIndexChange)="nzPageIndexChange($event)"-->
+<!--        [nzSize]="nzSizePagination"-->
+<!--    >-->
+<!--    </nz-pagination>-->
+<!--</div>-->
+
+<ng-template #totalTemplate let-total>共 {{ total }} 条</ng-template>
