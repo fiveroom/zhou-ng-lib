@@ -6,10 +6,14 @@ import {RightMenuModule} from '../../projects/right-menu/src/lib/right-menu.modu
 import {TableCfgModule} from '../../projects/right-menu/src/components/table-cfg/table-cfg.module';
 import {DynamicFormModule} from '../../projects/right-menu/src/components/dymic-form/dynamic-form.module';
 import {NzButtonModule} from 'ng-zorro-antd/button';
+import { TestDirective } from './test.directive';
+import { UseTestDirective } from './use-test.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TestDirective,
+    UseTestDirective
   ],
   imports: [
     BrowserModule,
