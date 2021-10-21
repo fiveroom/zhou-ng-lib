@@ -165,6 +165,7 @@ export class AppComponent {
     }
 
     // 模板视图
+    isOpen = false;
     setTemplate() {
         // let embeddedViewRef = this.testContainer.createEmbeddedView(this.dataF, {$implicit: '123'});
         let dataF = this.dataF.createEmbeddedView({$implicit: '123'})

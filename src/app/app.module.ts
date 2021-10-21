@@ -8,7 +8,7 @@ import {DynamicFormModule} from '../../projects/right-menu/src/components/dymic-
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import { TestDirective } from './test.directive';
 import { UseTestDirective } from './use-test.directive';
-
+import {PortalModule} from '@angular/cdk/portal';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +20,8 @@ import { UseTestDirective } from './use-test.directive';
       RightMenuModule,
       TableCfgModule,
       DynamicFormModule,
-      NzButtonModule
+      NzButtonModule,
+      PortalModule
   ],
   providers: [],
   bootstrap: [AppComponent]

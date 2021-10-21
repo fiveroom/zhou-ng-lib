@@ -34,4 +34,12 @@
 
 
 
-<div appTest  #trigger="appTest">test directive</div>
+<button nz-button appTest (click)="isOpen = !isOpen"  #trigger="appTest">test directive</button>
+
+<ng-template
+    appUseTest
+    [appTestOrigin]="trigger"
+    [isOpen]="isOpen"
+>
+    appUseTest
+</ng-template>
