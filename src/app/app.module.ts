@@ -9,6 +9,7 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
 import { TestDirective } from './test.directive';
 import { UseTestDirective } from './use-test.directive';
 import {PortalModule} from '@angular/cdk/portal';
+import {OverlayModule} from '@angular/cdk/overlay';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +22,7 @@ import {PortalModule} from '@angular/cdk/portal';
       TableCfgModule,
       DynamicFormModule,
       NzButtonModule,
+      OverlayModule,
       PortalModule
   ],
   providers: [],

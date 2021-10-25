@@ -34,12 +34,27 @@
 
 
 
-<button nz-button appTest (click)="isOpen = !isOpen"  #trigger="appTest">test directive</button>
+<!--<button nz-button appTest (click)="isOpen = !isOpen"  #trigger="appTest">test directive</button>-->
 
+<!--<ng-template-->
+<!--    appUseTest-->
+<!--    [appTestOrigin]="trigger"-->
+<!--    [isOpen]="isOpen"-->
+<!--&gt;-->
+<!--    appUseTest-->
+<!--</ng-template>-->
+
+<button (click)="isOpen = !isOpen" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+    {{isOpen ? "Close" : "Open"}}
+</button>
 <ng-template
-    appUseTest
-    [appTestOrigin]="trigger"
-    [isOpen]="isOpen"
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isOpen"
 >
-    appUseTest
+    <ul class="example-list">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+    </ul>
 </ng-template>
