@@ -161,15 +161,26 @@ export class AppComponent {
     // 组件型视图
     setInput(){
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuestionComponent);
-        this.testContainer.createComponent(componentFactory)
+        this.testContainer.createComponent(componentFactory);
     }
 
     // 模板视图
     isOpen = false;
+    showInput = false;
+    inputData = '';
+    hello = '123';
+
     setTemplate() {
         // let embeddedViewRef = this.testContainer.createEmbeddedView(this.dataF, {$implicit: '123'});
         let dataF = this.dataF.createEmbeddedView({$implicit: '123'})
-        console.log(' :>> ', dataF);
         this.testContainer.insert(dataF)
+    }
+
+    upDate() {
+        this.inputData = (+new Date()).toString()
+    }
+
+    upDateHello() {
+        this.hello = new Date().toString();
     }
 }

@@ -44,17 +44,31 @@
 <!--    appUseTest-->
 <!--</ng-template>-->
 
-<button (click)="isOpen = !isOpen" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
-    {{isOpen ? "Close" : "Open"}}
-</button>
-<ng-template
-    cdkConnectedOverlay
-    [cdkConnectedOverlayOrigin]="trigger"
-    [cdkConnectedOverlayOpen]="isOpen"
->
-    <ul class="example-list">
-        <li>Item 1</li>
-        <li>Item 2</li>
-        <li>Item 3</li>
-    </ul>
-</ng-template>
+<div style="height: 300px;overflow:auto;border: 1px solid black">
+
+    <button (click)="isOpen = !isOpen" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+        {{isOpen ? "Close" : "Open"}}
+    </button>
+    <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="isOpen"
+        [cdkConnectedOverlayScrollStrategy]=""
+    >
+        <ul class="example-list">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </ng-template>
+    <div style="height: 700px"></div>
+</div>
+<button nz-button (click)="showInput = !showInput">输入框</button>
+<button nz-button (click)="upDate()">更新</button>
+<button nz-button (click)="upDateHello()">hello</button>
+
+<div class="edit" appInput [showInput]="showInput" [data]="inputData">
+    <div>
+        <span>{{ hello }}</span>
+    </div>
+</div>

@@ -10,21 +10,29 @@ import { TestDirective } from './test.directive';
 import { UseTestDirective } from './use-test.directive';
 import {PortalModule} from '@angular/cdk/portal';
 import {OverlayModule} from '@angular/cdk/overlay';
+import { InputDirective } from './drictive/input.directive';
+import { TestInputComponent } from './test-input/test-input.component';
+import {FormsModule} from '@angular/forms';
+import {NzInputModule} from 'ng-zorro-antd/input';
 @NgModule({
   declarations: [
     AppComponent,
     TestDirective,
-    UseTestDirective
+    UseTestDirective,
+    InputDirective,
+    TestInputComponent
   ],
-  imports: [
-    BrowserModule,
-      RightMenuModule,
-      TableCfgModule,
-      DynamicFormModule,
-      NzButtonModule,
-      OverlayModule,
-      PortalModule
-  ],
+    imports: [
+        BrowserModule,
+        RightMenuModule,
+        TableCfgModule,
+        DynamicFormModule,
+        NzButtonModule,
+        NzInputModule,
+        OverlayModule,
+        PortalModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
